@@ -146,7 +146,7 @@ class MixpanelClient(object):
 
     @backoff.on_exception(
         backoff.expo,
-        (Server5xxError, Server429Error, ReadTimeoutError, ConnectionError),
+        (Server429Error, ReadTimeoutError, ConnectionError),
         max_tries=BACKOFF_MAX_TRIES_REQUEST,
         factor=3, 
         logger=LOGGER)
@@ -166,7 +166,7 @@ class MixpanelClient(object):
                                           **kwargs)
 
             if response.status_code >= 500:
-                raise Server5xxError()
+                raise Server5xxError(response.text)
 
             if response.status_code != 200:
                 raise_for_error(response)
