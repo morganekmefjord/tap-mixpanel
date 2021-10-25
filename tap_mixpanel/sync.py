@@ -8,6 +8,7 @@ from singer import metrics, metadata, Transformer, utils
 from singer.utils import strptime_to_utc
 from tap_mixpanel.transform import transform_record
 from tap_mixpanel.streams import STREAMS
+from tap_mixpanel.client import MixpanelError
 
 
 LOGGER = singer.get_logger()
@@ -330,12 +331,20 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                     # End export stream API call
 
                 else: # stream_name != 'export`
-                    data = client.request(
-                        method=api_method,
-                        url=url,
-                        path=path,
-                        params=querystring,
-                        endpoint=stream_name)
+                    try:
+                        data = client.request(
+                            method=api_method,
+                            url=url,
+                            path=path,
+                            params=querystring,
+                            endpoint=stream_name)
+                    except MixpanelError as ex:
+                        # Treat this as no data – not sure why it's thrown
+                        if "Cannot query one group with cohorts of different groups" in str(ex):
+                            LOGGER.info("Skipping cohort – Cannot query one group with cohorts of different groups")
+                            pass
+                        else:
+                            raise ex
 
                     # time_extracted: datetime when the data was extracted from the API
                     time_extracted = utils.now()
