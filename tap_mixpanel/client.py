@@ -65,7 +65,7 @@ def get_exception_for_error_code(error_code):
     return ERROR_CODE_EXCEPTION_MAPPING.get(error_code, MixpanelError)
 
 def raise_for_error(response):
-    LOGGER.error('ERROR {}: {}, REASON: {}'.format(response.status_code,\
+    LOGGER.warn('STATUS {}: {}, REASON: {}'.format(response.status_code,\
         response.text, response.reason))
     try:
         response.raise_for_status()
