@@ -340,7 +340,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                             endpoint=stream_name)
                     except Server5xxError as ex:
                         if "An unexpected error occurred." in str(ex):
-                            LOGGER.warn("Skipping record – error from Mixpanel API")
+                            LOGGER.warn("Skipping record")
                             pass
                         else:
                             raise ex

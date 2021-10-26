@@ -65,8 +65,10 @@ def get_exception_for_error_code(error_code):
     return ERROR_CODE_EXCEPTION_MAPPING.get(error_code, MixpanelError)
 
 def raise_for_error(response):
-    LOGGER.warn('STATUS {}: {}, REASON: {}'.format(response.status_code,\
-        response.text, response.reason))
+    if response.status_code != 400:
+        LOGGER.warn('STATUS {}: {}, REASON: {}'.format(response.status_code,\
+            response.text, response.reason))
+
     try:
         response.raise_for_status()
     except (requests.HTTPError, requests.ConnectionError) as error:
