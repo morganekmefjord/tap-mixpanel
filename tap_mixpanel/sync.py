@@ -231,7 +231,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                 params['page_size'] = limit
 
             while offset <= total_records and session_id is not None:
-                if pagination and page != 0:
+                if pagination:
                     params['session_id'] = session_id
                     params['page'] = page
 
@@ -421,11 +421,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                                 stream_name, record_count))
 
                             # set total_records and pagination fields
-                            if page == 0:
-                                if isinstance(data, dict):
-                                    total_records = data.get('total', record_count)
-                                else:
-                                    total_records = record_count
+                            total_records += record_count
                             parent_total = parent_total + record_count
                             date_total = date_total + record_count
                             endpoint_total = endpoint_total + record_count
