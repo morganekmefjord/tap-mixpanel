@@ -4,6 +4,7 @@ import json
 import pytz
 import urllib
 import singer
+import uuid
 from singer import metrics, metadata, Transformer, utils
 from singer.utils import strptime_to_utc
 from tap_mixpanel.transform import transform_record
@@ -226,7 +227,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
             total_records = 0 # Total records for all pages
             record_count = 0 # Total processed for page
 
-            session_id = 'initial'
+            session_id = f'session-{parent_id}-{uuid.uuid4().hex}'
             if pagination:
                 params['page_size'] = limit
 
@@ -280,7 +281,6 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                                 if val == '' or not val:
                                     LOGGER.error('Error: Missing Key')
                                     raise 'Missing Key'
-
                             if len(transformed_data) == limit:
                                 # Process full batch (limit = 250) records
                                 #   and get the max_bookmark_value and record_count
@@ -386,7 +386,6 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                             }
                             data = new_data
 
-                        transformed_data = []
                         # Loop through result records
                         for record in data[data_key]:
                             # transform reocord and append to transformed_data array
