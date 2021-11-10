@@ -349,6 +349,9 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                         if "Cannot query one group with cohorts of different groups" in str(ex):
                             LOGGER.info("Skipping cohort – Cannot query one group with cohorts of different groups")
                             pass
+                        elif "malformed raw cohort" in str(ex):
+                            LOGGER.info("Skipping cohort – Malformed raw cohort")
+                            pass
                         else:
                             raise ex
 
