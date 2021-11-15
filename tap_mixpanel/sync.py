@@ -67,9 +67,22 @@ def process_records(catalog, #pylint: disable=too-many-branches
     stream = catalog.get_stream(stream_name)
     schema = stream.schema.to_dict()
     stream_metadata = metadata.to_map(stream.metadata)
+    
+    dt_fields = []
+    for k in schema['properties'].keys():
+        if 'format' in schema['properties'][k].keys():
+            if schema['properties'][k]['format']=='date-time':
+                dt_fields.append(k)
 
     with metrics.record_counter(stream_name) as counter:
         for record in records:
+
+            # Transform invalid datetime
+            for field in record.keys():
+                if field in dt_fields:
+                    if record[field] in ['false', 'true']:
+                        record[field] = None
+                
             # Transform record for Singer.io
             with Transformer() as transformer:
                 try:
