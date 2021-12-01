@@ -368,17 +368,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                         else:
                             raise ex
                     except:
-                        LOGGER.info("Request returned invalid data, retrying...")
-                        try:
-                            data = client.request(
-                                method=api_method,
-                                url=url,
-                                path=path,
-                                params=querystring,
-                                endpoint=stream_name)
-                        except:
-                            LOGGER.warn("Invalid data, skipping record")
-                            data = None
+                        LOGGER.warn("Invalid data, skipping record")
 
                     # time_extracted: datetime when the data was extracted from the API
                     time_extracted = utils.now()
