@@ -352,11 +352,8 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                             params=querystring,
                             endpoint=stream_name)
                     except Server5xxError as ex:
-                        if "An unexpected error occurred." in str(ex):
-                            LOGGER.warn("Skipping record")
-                            pass
-                        else:
-                            raise ex
+                        LOGGER.warn("500 response, skipping record")
+                        pass
                     except MixpanelError as ex:
                         # Treat this as no data – not sure why it's thrown
                         if "Cannot query one group with cohorts of different groups" in str(ex):
