@@ -67,8 +67,9 @@ def get_schema(client, properties_flag, denest_properties_flag, stream_name):
                     elif property_type == 'number':
                         this_type = ['null', 'number']
                         this_multiple_of = 1e-20
-                    elif property_type == 'datetime':
-                        this_format = 'date-time'
+                    ## This can cause errors because dates are not enforced
+                    # elif property_type == 'datetime':
+                    #     this_format = 'date-time'
                     elif property_type == 'object':
                         this_type = ['null', 'object']
                         this_additional_properties = True
