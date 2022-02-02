@@ -91,10 +91,12 @@ def process_records(catalog, #pylint: disable=too-many-branches
                         schema,
                         stream_metadata)
                 except Exception as err:
-                    LOGGER.error('Error: {}'.format(err))
-                    LOGGER.error(' for schema: {}'.format(json.dumps(
-                        schema, sort_keys=True, indent=2)))
-                    raise err
+                    LOGGER.info("Ignoring malformed record")
+                    continue
+                    # LOGGER.error('Error: {}'.format(err))
+                    # LOGGER.error(' for schema: {}'.format(json.dumps(
+                    #     schema, sort_keys=True, indent=2)))
+                    # raise err
 
                 # Reset max_bookmark_value to new value if higher
                 if transformed_record.get(bookmark_field):
