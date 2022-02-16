@@ -3,7 +3,7 @@ import io
 import backoff
 import jsonlines
 import requests
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, HTTPError
 from singer import metrics
 import singer
 
@@ -148,7 +148,7 @@ class MixpanelClient(object):
 
     @backoff.on_exception(
         backoff.expo,
-        (Server429Error, ReadTimeoutError, ConnectionError),
+        (Server429Error, ReadTimeoutError, ConnectionError, HTTPError),
         max_tries=BACKOFF_MAX_TRIES_REQUEST,
         factor=3, 
         logger=LOGGER)
