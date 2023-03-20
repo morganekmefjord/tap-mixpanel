@@ -94,7 +94,9 @@ def raise_for_error(response):
 class MixpanelClient(object):
     def __init__(self,
                  api_secret,
+                 cluster_location='us',
                  user_agent=None):
+        self.__cluster_location = cluster_location
         self.__api_secret = api_secret
         self.__user_agent = user_agent
         self.__session = requests.Session()
@@ -108,6 +110,8 @@ class MixpanelClient(object):
     def __exit__(self, exception_type, exception_value, traceback):
         self.__session.close()
 
+    def get_cluster_location(self):
+        return self.__cluster_location
 
     @backoff.on_exception(backoff.expo,
                           (Server5xxError, Server429Error, ReadTimeoutError, ConnectionError),
@@ -118,7 +122,11 @@ class MixpanelClient(object):
             raise Exception('Error: Missing api_secret in tap config.json.')
         headers = {}
         # Endpoint: simple API call to return a single record (org settings) to test access
-        url = 'https://mixpanel.com/api/2.0/engage'
+        if self.__cluster_location.lower() == 'eu':
+            url = 'https://eu.mixpanel.com/api/2.0/engage'
+        else:
+            url = 'https://mixpanel.com/api/2.0/engage'
+
         LOGGER.info('Checking access by calling {}'.format(url))
         if self.__user_agent:
             headers['User-Agent'] = self.__user_agent
@@ -185,7 +193,11 @@ class MixpanelClient(object):
         if url and path:
             url = '{}/{}'.format(url, path)
         elif path and not url:
-            url = 'https://mixpanel.com/api/2.0/{}'.format(path)
+            if self.__cluster_location.lower() == 'eu':
+                url = 'https://eu.mixpanel.com/api/2.0/{}'.format(path)
+            else:
+                url = 'https://mixpanel.com/api/2.0/{}'.format(path)
+
 
         if 'endpoint' in kwargs:
             endpoint = kwargs['endpoint']
@@ -226,7 +238,10 @@ class MixpanelClient(object):
         if url and path:
             url = '{}/{}'.format(url, path)
         elif path and not url:
-            url = 'https://data.mixpanel.com/api/2.0/{}'.format(path)
+            if self.__cluster_location.lower() == 'eu':
+                url = 'https://data-eu.mixpanel.com/api/2.0/{}'.format(path)
+            else:
+                url = 'https://data.mixpanel.com/api/2.0/{}'.format(path)
 
         if 'endpoint' in kwargs:
             endpoint = kwargs['endpoint']

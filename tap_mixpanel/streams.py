@@ -17,7 +17,7 @@
 
 STREAMS = {
     'export': {
-        'url': 'https://data.mixpanel.com/api/2.0',
+        'url': 'https://data-eu.mixpanel.com/api/2.0',
         'path': 'export',
         'data_key': 'results',
         'api_method': 'GET',
@@ -32,7 +32,7 @@ STREAMS = {
     },
 
     'engage': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'path': 'engage',
         'data_key': 'results',
         'api_method': 'GET',
@@ -44,7 +44,7 @@ STREAMS = {
     },
 
     'funnels': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'parent_path': 'funnels/list',
         'parent_id_field': 'funnel_id',
         'path': 'funnels',
@@ -64,7 +64,7 @@ STREAMS = {
     },
 
     'cohorts': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'path': 'cohorts/list',
         'data_key': '.',
         'api_method': 'GET',
@@ -76,7 +76,7 @@ STREAMS = {
     },
 
     'cohort_members': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'parent_path': 'cohorts/list',
         'parent_id_field': 'id',
         'path': 'engage',
@@ -92,7 +92,7 @@ STREAMS = {
     },
 
     'revenue': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'path': 'engage/revenue',
         'data_key': 'results',
         'api_method': 'GET',
@@ -109,7 +109,7 @@ STREAMS = {
     },
 
     'annotations': {
-        'url': 'https://mixpanel.com/api/2.0',
+        'url': 'https://eu.mixpanel.com/api/2.0',
         'path': 'annotations',
         'data_key': 'annotations',
         'api_method': 'GET',

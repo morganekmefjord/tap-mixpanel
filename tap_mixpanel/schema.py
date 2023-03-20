@@ -29,6 +29,11 @@ def get_schema(client, properties_flag, denest_properties_flag, stream_name):
     else:
         schema['additionalProperties'] = False
 
+    if client.get_cluster_location() == 'eu':
+        url = 'https://eu.mixpanel.com/api/2.0'
+    else:
+        url = 'https://mixpanel.com/api/2.0'
+
     # Denest properties only when it's required
     if str(denest_properties_flag).lower() == 'true':
         # Remove properties from the schema, we'll denest it
@@ -38,7 +43,7 @@ def get_schema(client, properties_flag, denest_properties_flag, stream_name):
         if stream_name == 'engage':
             properties = client.request(
                 method='GET',
-                url='https://mixpanel.com/api/2.0',
+                url=url,
                 path='engage/properties',
                 params={'limit': 2000},
                 endpoint='engage_properties')
@@ -96,7 +101,7 @@ def get_schema(client, properties_flag, denest_properties_flag, stream_name):
             #  https://developer.mixpanel.com/docs/data-export-api#section-hr-span-style-font-family-courier-top-span
             results = client.request(
                 method='GET',
-                url='https://mixpanel.com/api/2.0',
+                url=url,
                 path='events/properties/top',
                 params={'limit': 2000},
                 endpoint='event_properties')

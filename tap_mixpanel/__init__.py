@@ -19,7 +19,8 @@ REQUIRED_CONFIG_KEYS = [
     'date_window_size',
     'attribution_window',
     'start_date',
-    'user_agent'
+    'user_agent',
+    'cluster_location',
 ]
 
 
@@ -48,7 +49,8 @@ def main():
 
 
     with MixpanelClient(parsed_args.config['api_secret'],
-                        parsed_args.config['user_agent']) as client:
+                        parsed_args.config['cluster_location'],
+                        parsed_args.config['user_agent'],) as client:
 
         state = {}
         if parsed_args.state:
